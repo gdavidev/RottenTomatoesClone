@@ -5,12 +5,10 @@
 	<%@ include file="/view/common/defaultPageHead.jsp" %>
 	<title>Insert title here</title>
 </head>
-<body class="overflow-x-hidden">
+<body>
 	<%@ include file="/view/common/navbar.jsp" %>
 	
-	<main style="min-height: calc(100vh - (169px + 56px));" class="px-5 py-2">
-		
-	</main>
+	
 	
 	<%@ include file="/view/common/footer.jsp" %>
 </body>

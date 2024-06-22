@@ -1,12 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-
-</body>
-</html>
+ <footer class="bg-dark py-3 mt-4 w-100" data-bs-theme="dark">
+   <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+     <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+     <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+     <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+     <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+     <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+   </ul>
+   <p class="text-center text-muted">© 2022 Company, Inc</p>
+ </footer>
