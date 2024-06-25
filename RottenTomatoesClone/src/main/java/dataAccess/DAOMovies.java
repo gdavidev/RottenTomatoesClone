@@ -7,14 +7,42 @@ import java.util.ArrayList;
 import models.Movie;
 
 public class DAOMovies extends DAO {
-	public ArrayList<Movie> getAll() {
-		String query = "SELECT * FROM Movies;";
+	public enum SortBy {
+		MOST_RATED,
+		BEST_RATING,
+		NAME
+	}
+	
+	public ArrayList<Movie> getMovie(SortBy sortParameter) {
+		return getMovie(0, sortParameter);
+	}
+	
+	public ArrayList<Movie> getMovie(int amount, SortBy sortParameter) {
 		ArrayList<Movie> list = new ArrayList<Movie>();
+		String query = 
+				  " SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m "
+				+ " INNER JOIN ratings AS r ON r.movieId = m.id "
+				+ " GROUP BY m.id, m.titulo, m.diretor, m.genero ";
+		switch (sortParameter) {
+			case MOST_RATED: 	query += "ORDER BY ratingCount "; 	break;
+			case BEST_RATING: 	query += "ORDER BY ratingAverage ";	break;
+			case NAME: 			query += "ORDER BY m.titulo ";		break;
+		}
+		if (amount > 0) {
+			query += "LIMIT " + amount;
+		}
 		
 		ResultSet rs = this.dbQuery.query(query);
 		try {
 			while(rs.next()) {
-				Movie movie = new Movie(rs.getInt("id"), rs.getString("titulo"), rs.getString("diretor"), rs.getString("genero"));
+				Movie movie = new Movie(
+					rs.getInt("m.id"),
+					rs.getString("m.titulo"),
+					rs.getString("m.diretor"),
+					rs.getString("m.genero"),
+					rs.getInt("ratingCount"),
+					rs.getFloat("ratingAverage")
+				);
 				list.add(movie);
 			}
 		} catch (SQLException e) {
@@ -25,8 +53,8 @@ public class DAOMovies extends DAO {
 	}
 	
 	public Movie getMovie(int id) {
-		String query = "SELECT * FROM Movies WHERE id = "+ String.valueOf(id) +";";
 		Movie movie = null;		
+		String query = "SELECT * FROM Movies WHERE id = "+ String.valueOf(id) +";";
 		
 		try(ResultSet rs = this.dbQuery.query(query)) {
 			if (rs.getFetchSize() == 1)

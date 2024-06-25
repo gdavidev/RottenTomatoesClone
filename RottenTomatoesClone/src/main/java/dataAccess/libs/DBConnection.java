@@ -33,7 +33,7 @@ public class DBConnection {
 		String url = "jdbc:mariadb://"+this.host+":"+port+"/"+this.schema+"?user="+this.user+"&password="+this.password+timezone;
 		try {
 			Class.forName("org.mariadb.jdbc.Driver").getConstructor().newInstance();
-			this.connection = DriverManager.getConnection(url);;
+			this.connection = DriverManager.getConnection(url);
 		} catch (InstantiationException e){
 			e.printStackTrace();
 		} catch (IllegalAccessException e){

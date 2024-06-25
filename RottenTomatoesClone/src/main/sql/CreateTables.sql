@@ -20,11 +20,9 @@ CREATE TABLE ratings (
 	FOREIGN KEY (userId) REFERENCES users(id)
 );
 
-CREATE VIEW moviesView (
-	id, titulo, diretor, genero, AVG(ratings.rating) OVER(GROUP BY movies.id) AS ratingAverage
-	FROM movies
-	INNER JOIN ratings ON ratings.movieId = movies.id;
-);
+SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS rating FROM movies AS m
+INNER JOIN ratings AS r ON r.movieId = m.id
+GROUP BY m.id, m.titulo, m.diretor, m.genero;
 
 -- Inserção de registros na tabela de filmes
 INSERT INTO movies (titulo, diretor, genero) VALUES
