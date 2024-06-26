@@ -64,4 +64,28 @@ public class DAOMovies extends DAO {
 		}
 		return movie;
 	}
+	
+	public void store(Movie movie) {
+		if (movie.id == 0)
+			insertMovie(movie);
+		else
+			updateMovie(movie);
+			
+	}
+	
+	private void insertMovie(Movie movie) {
+		String query = 
+				" INSERT INTO Movies(titulo, diretor, genero)"
+				+ " VALUES('"+ movie.title +"', '"+ movie.director +"', '"+ movie.genre +"')";
+		dbQuery.execute(query);
+	}
+	
+	private void updateMovie(Movie movie) {
+		String query = 
+				" UPDATE Movies SET "
+				+ " titulo = '"+ movie.title +"',"
+				+ " diretor = '"+ movie.title +"',"
+				+ " genero = '"+ movie.title +"';";
+		dbQuery.execute(query);
+	}
 }
