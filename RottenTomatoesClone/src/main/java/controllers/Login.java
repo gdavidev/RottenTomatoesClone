@@ -7,35 +7,41 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Servlet implementation class Login
- */
+@WebServlet(name="mainServlet", urlPatterns={"/login", "/register"})
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public Login() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String action = request.getServletPath().substring(1); // Remove the leading slash
+		request.setAttribute("action", action);
 		getServletContext().getRequestDispatcher("/view/auth/loginRegister.jsp").forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		String action = request.getServletPath();
+		if (action.equals("/login")) {
+			handleLogin(request, response);
+		} else if (action.equals("/register")) {
+			handleRegister(request, response);
+		}
 	}
 
+	private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
+		// Adicione a lógica de autenticação aqui
+		response.getWriter().append("Login feito com sucesso para o email: ").append(email);
+	}
+
+	private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
+		// Adicione a lógica de registro aqui
+		response.getWriter().append("Registro feito com sucesso para o usuário: ").append(name);
+	}
 }
