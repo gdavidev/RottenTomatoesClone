@@ -20,7 +20,7 @@
 						<h2 class="text-center"><%= request.getAttribute("action").equals("login") ? "Login" : "Register" %></h2>
 					</div>
 					<div class="card-body">
-						<form action="<%= request.getServletPath() %>" method="post">
+						<form action="<%= request.getAttribute("action") %>" method="post">
 							<% if (request.getAttribute("action").equals("register")) { %>
 								<div class="form-group">
 									<label for="name">Name:</label>
@@ -39,6 +39,25 @@
 								<button type="submit" class="btn btn-primary btn-block">
 									<%= request.getAttribute("action").equals("login") ? "Login" : "Register" %>
 								</button>
+								<% 
+									if (request.getAttribute("erro") != null) {
+										if (request.getAttribute("action").equals("login")) {
+											%>
+											<p style="color: red;">ERRO: Email ou Senha Inválidos!</p>
+											<%
+										} else {
+											%>
+											<p style="color: red;">ERRO: Email já Cadastrado!</p>
+											<%	
+										}
+									}
+								
+									if (request.getAttribute("registro") != null) {
+										%>
+										<p style="color: green;">Conta Registrada! Agora Faça Login.</p>
+										<%
+									}
+								%>
 							</div>
 						</form>
 					</div>

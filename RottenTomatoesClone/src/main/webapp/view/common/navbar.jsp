@@ -1,3 +1,4 @@
+<%@ page import="models.User"%>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark px-5">
 	<a class="navbar-brand" href="#">Rot Tomato</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,14 +23,18 @@
 					<input class="form-control" type="text" placeholder="Search">
 				</form>
 			</li>
-			<%if (request.getSession().getAttribute("loggedUser") != null) { %>
+			<%
+				
+				if (request.getSession().getAttribute("loggedUser") != null) { 
+				User user = (User) request.getSession().getAttribute("loggedUser");
+			%>
 				<li class="nav-item dropdown">
 				  	<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-			    		<%=request.getSession().getAttribute("loggedUser") %>
+			    		<%=user.userName %>
 				  	</button>
 				  	<ul class="dropdown-menu">
 				   		<li><a class="dropdown-item" href="#">Meus favoritos</a></li>
-					    <li><a class="dropdown-item" href="#">Sair</a></li>				    
+					    <li><a class="dropdown-item" href="logout">Sair</a></li>				    
 				  	</ul>
 	         	</li>
          	<%} else { %>
