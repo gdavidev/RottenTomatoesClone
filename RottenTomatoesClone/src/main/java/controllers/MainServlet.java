@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import dataAccess.DAOMovies;
 import dataAccess.DAOMovies.SortBy;
 
-@WebServlet(name="/indexServlet", urlPatterns={"/index", "/home", "/welcome"})
+@WebServlet(name="/mainServlet", urlPatterns={"/index", "/home", "/welcome"})
 public class MainServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAOMovies daoMovies = new DAOMovies();

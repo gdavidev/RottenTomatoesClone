@@ -12,9 +12,6 @@
 			<li class="nav-item">
 				<a class="nav-link" href="<%=request.getContextPath() %>/movies">All movies</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="<%=request.getContextPath() %>/home">Disabled</a>
-			</li>
 		</ul>
 		<ul class="navbar-nav column-gap-2">
 			<li class="nav-item">

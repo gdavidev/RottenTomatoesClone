@@ -24,9 +24,9 @@ public class DAOMovies extends DAO {
 				+ " INNER JOIN ratings AS r ON r.movieId = m.id "
 				+ " GROUP BY m.id, m.titulo, m.diretor, m.genero ";
 		switch (sortParameter) {
-			case MOST_RATED: 	query += "ORDER BY ratingCount "; 	break;
-			case BEST_RATING: 	query += "ORDER BY ratingAverage ";	break;
-			case NAME: 			query += "ORDER BY m.titulo ";		break;
+			case MOST_RATED: 	query += "ORDER BY ratingCount DESC "; 		break;
+			case BEST_RATING: 	query += "ORDER BY ratingAverage DESC ";	break;
+			case NAME: 			query += "ORDER BY m.titulo DESC ";			break;
 		}
 		if (amount > 0) {
 			query += "LIMIT " + amount;
