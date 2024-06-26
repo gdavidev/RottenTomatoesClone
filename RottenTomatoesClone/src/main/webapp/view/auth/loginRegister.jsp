@@ -3,7 +3,7 @@
 <html>
 <head>
 	<%@ include file="/view/common/defaultPageHead.jsp" %>
-	<title>Insert title here</title>
+	<title>Login/Sign-in</title>
 </head>
 <body>
 	<%@ include file="/view/common/navbar.jsp" %>

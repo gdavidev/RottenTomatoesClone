@@ -12,6 +12,9 @@
 			<li class="nav-item">
 				<a class="nav-link" href="<%=request.getContextPath() %>/movies">All movies</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="<%=request.getContextPath() %>/home">Disabled</a>
+			</li>
 		</ul>
 		<ul class="navbar-nav column-gap-2">
 			<li class="nav-item">
@@ -30,8 +33,8 @@
 				  	</ul>
 	         	</li>
          	<%} else { %>
-         		<li><a class="btn btn-primary" href="<%=request.getContextPath() %>/user/login">Login</a></li>
-         		<li><a class="btn btn-secondary" href="<%=request.getContextPath() %>/user/register">Sign-in</a></li>
+         		<li><a class="btn btn-primary" href="<%=request.getContextPath() %>/login">Login</a></li>
+         		<li><a class="btn btn-secondary" href="<%=request.getContextPath() %>/register">Sign-in</a></li>
          	<%} %>
 		</ul>	
 	</div>

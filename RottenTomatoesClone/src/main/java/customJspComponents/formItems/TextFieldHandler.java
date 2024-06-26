@@ -1,8 +1,8 @@
 package customJspComponents.formItems;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.TagSupport;
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.JspWriter;
+import jakarta.servlet.jsp.tagext.TagSupport;
 
 public class TextFieldHandler extends TagSupport {
 	private static final long serialVersionUID = 9182930244857991365L;
@@ -10,7 +10,6 @@ public class TextFieldHandler extends TagSupport {
 	private String label;
 	private String placeholder;
 	private String bottomTipText;
-	private String value;
 	private boolean required;
 	
 	public void setName(String name) {
@@ -24,9 +23,6 @@ public class TextFieldHandler extends TagSupport {
 	}
 	public void setBottomTipText(String bottomTipText) {
 		this.bottomTipText = bottomTipText;
-	}
-	public void setValue(String value) {
-		this.value = value;
 	}
 	public void setRequired(boolean required) {
 		this.required = required;
@@ -42,7 +38,6 @@ public class TextFieldHandler extends TagSupport {
 			+ " 			id='" + this.name + "'"
 			+ " 			name='" + this.name + "'"
 			+ " 			placeholder='" + this.placeholder + "'"
-			+ "				value='"+ this.value +"'"
 			+ "				required='" + (required ? "true" : "false") + "'>"
 			+ (hasBottomTipText ? "<div id='"+ this.name + "Tip' class='form-text'>" + this.bottomTipText + "</div>" : "")
 			+ "</div>";	    

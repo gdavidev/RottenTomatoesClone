@@ -1,5 +1,6 @@
 package dataAccess.libs;
 
+
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,11 +8,11 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-	private String host = "127.0.0.1";
-	private String port = "3306";
-	private String schema = "rottomato";
-	private String user = "root";
-	private String password = "";
+	private String host;
+	private String port;
+	private String schema;
+	private String user;
+	private String password;
 	
 	private Connection connection = null;
 	
@@ -25,14 +26,23 @@ public class DBConnection {
 	}
 	
 	public DBConnection() {
+		this.setHost	("localhost");
+		this.setPort	("3306");
+		this.setSchema	("rottomato");
+		this.setUser	("root");
+		this.setPassword("");
 		this.doConnection();
 	}
 	
 	private void doConnection() {
-		String timezone = "&useTimezone=true&serverTimezone=UTC";
-		String url = "jdbc:mariadb://"+this.host+":"+port+"/"+this.schema+"?user="+this.user+"&password="+this.password+timezone;
+		String timezone = "&useTimezone=true&serverTimezone=UTC";// use o &useTimezone=true&serverTimezone=UTC para não ter problemas de data;
+		String url = "jdbc:mysql://"+this.host+":"+port+"/"+this.schema+"?user="+this.user+"&password="+this.password+timezone;
 		try {
-			Class.forName("org.mariadb.jdbc.Driver").getConstructor().newInstance();
+			// Class.forName("com.mysql.jdbc.Driver").newInstance();
+			// A linha acima foi depreciada após o mysql 8.0
+			// A partir do mysql-connector-java-8.0.17.jar utilize as duas linhas abaixo
+			Class.forName("com.mysql.cj.jdbc.Driver").getConstructor().newInstance();
+			DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
 			this.connection = DriverManager.getConnection(url);
 		} catch (InstantiationException e){
 			e.printStackTrace();
@@ -42,7 +52,7 @@ public class DBConnection {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
+		}catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
