@@ -12,7 +12,7 @@ import dataAccess.DAOMovies;
 import dataAccess.DAOMovies.SortBy;
 
 @WebServlet(name="/MovieServlet",
-			urlPatterns={"/movies/view", "/movies/all", "/movies/edit"})
+			urlPatterns={"/movies/view", "/movies/all", "/movies/edit", "/movies/add"})
 public class MovieServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAOMovies daoMovies = new DAOMovies(); 
@@ -20,7 +20,6 @@ public class MovieServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		switch (request.getServletPath()) {
 			case "/movies/edit":
-				/*VALIDATE USER*/
 				int movieId = Integer.valueOf(request.getParameter("id"));
 				request.setAttribute("movie", daoMovies.getMovie(movieId));
 				getServletContext().getRequestDispatcher("/view/admin/movieEdit.jsp").forward(request, response);

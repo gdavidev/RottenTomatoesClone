@@ -42,8 +42,8 @@ public class TextFieldHandler extends TagSupport {
 			+ " 			id='" + this.name + "'"
 			+ " 			name='" + this.name + "'"
 			+ " 			placeholder='" + this.placeholder + "'"
-			+ "				value='"+ this.value +"'"
-			+ "				required='" + (required ? "true" : "false") + "'>"
+			+ "				value='" + (this.value != null ? this.value == null : "") + "'"
+			+ "				required='" + (this.required ? "true" : "false") + "'>"
 			+ (hasBottomTipText ? "<div id='"+ this.name + "Tip' class='form-text'>" + this.bottomTipText + "</div>" : "")
 			+ "</div>";	    
 		try {

@@ -4,6 +4,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<%
+		Movie movie = (Movie) request.getAttribute("movie");
+	%>
+
 	<%@ include file="/view/common/defaultPageHead.jsp"%>
 	<title>Insert title here</title>
 </head>
@@ -22,14 +26,14 @@
 				</div>
 			</div>
 			<div>
-				<formItem:textField label="Title:" name="title" />
+				<formItem:textField label="Title:" name="title" value="<%=movie.title %>" />
 			</div>
 			<div class="row">
 				<div class="col">
-					<formItem:textField label="Director:" name="director" />
+					<formItem:textField label="Director:" name="director" value="<%=movie.director %>" />
 				</div>
 				<div class="col">
-					<formItem:textField label="Genre:" name="genre" />				
+					<formItem:textField label="Genre:" name="genre" value="<%=movie.genre %>" />				
 				</div>
 			</div>
 		</div>
