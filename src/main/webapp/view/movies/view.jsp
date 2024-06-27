@@ -1,4 +1,5 @@
 <%@ page import="models.Movie"%>
+<%@ page import="dataAccess.DAORates"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -7,6 +8,7 @@
     <%
         Movie movie = (Movie) request.getAttribute("movie");
     	int rate = Math.round(movie.ratingAverage);
+    	DAORates daoRate = new DAORates();
     %>
     <title>Rotten Tomatoes | <%= movie.title %></title>
     <!-- Bootstrap CSS -->
@@ -48,21 +50,18 @@
 				<% 
 				if (request.getSession().getAttribute("loggedUser") != null) {
 					%><div class="mt-5">
-					    <a href="/RottenTomatoesClone/rate?movieID=<%= movie.id %>"><button type="button" class="btn btn-primary" style="width: 150px;">Avaliar</button></a>
+					    <a href="/RottenTomatoesClone/rate?movieID=<%= movie.id %>"><button type="button" class="btn btn-primary" style="width: 150px;">
+					    <%	
+					    	User user = (User) request.getSession().getAttribute("loggedUser");
+					    	Boolean avaliado = daoRate.verificaAvaliacao(movie.id, user.id);
+					    	if (!avaliado) {
+					    		%>Avaliar<%
+					    	} else {
+					    		%>Reavaliar<%
+					    	}
+					    %>
+					    </button></a>
 					</div><%
-					if (!(request.getAttribute("avaliado").equals(false))) {
-						%>
-						<br>
-						<p style="color: green;">Avaliação Enviada!</p>
-						<%
-					}
-				
-					if (request.getAttribute("erro") != null) {
-						%>
-						<br>
-						<p style="color: red;">ERRO: Avaliação não registrada!</p>
-						<%
-					}
 				}
 				%>
 
