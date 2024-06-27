@@ -11,10 +11,7 @@
 				<a class="nav-link" href="<%=request.getContextPath() %>/home">Home</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="<%=request.getContextPath() %>/movies">All movies</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="<%=request.getContextPath() %>/home">Disabled</a>
+				<a class="nav-link" href="<%=request.getContextPath() %>/movies/all">All movies</a>
 			</li>
 		</ul>
 		<ul class="navbar-nav column-gap-2">
@@ -23,8 +20,7 @@
 					<input class="form-control" type="text" placeholder="Search">
 				</form>
 			</li>
-			<%
-				
+			<%			
 				if (request.getSession().getAttribute("loggedUser") != null) { 
 				User user = (User) request.getSession().getAttribute("loggedUser");
 			%>
