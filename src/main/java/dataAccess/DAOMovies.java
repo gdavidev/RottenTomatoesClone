@@ -108,12 +108,11 @@ public class DAOMovies extends DAO {
 		String query = 
 				  " SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m "
 				+ " INNER JOIN ratings AS r ON r.movieId = m.id "
-				+ " GROUP BY m.id, m.titulo, m.diretor, m.genero "
 				+ " WHERE id = " + String.valueOf(id) + ";";
 		
 		ResultSet rs = this.dbQuery.query(query);
 		try {
-			while(rs.next()) {
+			rs.next();
 				movie = new Movie(
 					rs.getInt("m.id"),
 					rs.getString("m.titulo"),
@@ -122,16 +121,14 @@ public class DAOMovies extends DAO {
 					rs.getInt("ratingCount"),
 					rs.getFloat("ratingAverage")
 				);
-			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 		return movie;
 	}
+
+
 	
 	public void store(Movie movie) {
 		if (movie.id == 0)
