@@ -29,7 +29,7 @@
 				<div class="card" style="width: 14rem;">
 					<img src="https://placehold.co/30x40" class="card-img-top" alt="...">
 					<div class="card-body">
-						<h5 class="card-title"><%= movie.title %></h5>
+						<a href="rate?movieID=<%= movie.id %>" style="text-decoration: none; color: inherit;"><h5 class="card-title"><%= movie.title %></h5></a>
 						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 					</div>
 					<div id="ratings" class="w-100 d-flex align-items-center">

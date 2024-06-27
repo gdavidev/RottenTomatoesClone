@@ -24,9 +24,9 @@ public class DAOMovies extends DAO {
 				+ " INNER JOIN ratings AS r ON r.movieId = m.id "
 				+ " GROUP BY m.id, m.titulo, m.diretor, m.genero ";
 		switch (sortParameter) {
-			case MOST_RATED: 	query += "ORDER BY ratingCount "; 	break;
-			case BEST_RATING: 	query += "ORDER BY ratingAverage ";	break;
-			case NAME: 			query += "ORDER BY m.titulo ";		break;
+			case MOST_RATED: 	query += "ORDER BY ratingCount DESC "; 	break;
+			case BEST_RATING: 	query += "ORDER BY ratingAverage DESC ";	break;
+			case NAME: 			query += "ORDER BY m.titulo DESC ";		break;
 		}
 		if (amount > 0) {
 			query += "LIMIT " + amount;
@@ -53,14 +53,27 @@ public class DAOMovies extends DAO {
 	}
 	
 	public Movie getMovie(int id) {
-		Movie movie = null;		
-		String query = "SELECT * FROM Movies WHERE id = "+ String.valueOf(id) +";";
+		Movie movie = new Movie();
+		String query = 
+				  " SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m "
+				+ " INNER JOIN ratings AS r ON r.movieId = m.id "
+				+ " WHERE id = " + String.valueOf(id) + ";";
 		
-		try(ResultSet rs = this.dbQuery.query(query)) {
-			if (rs.getFetchSize() == 1)
-				movie = new Movie(rs.getInt("id"), rs.getString("titulo"), rs.getString("diretor"),rs.getString("genero"));			
+		ResultSet rs = this.dbQuery.query(query);
+		try {
+			while(rs.next()) {
+				movie = new Movie(
+					rs.getInt("m.id"),
+					rs.getString("m.titulo"),
+					rs.getString("m.diretor"),
+					rs.getString("m.genero"),
+					rs.getInt("ratingCount"),
+					rs.getFloat("ratingAverage")
+				);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
 		return movie;
 	}

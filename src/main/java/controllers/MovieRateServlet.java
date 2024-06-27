@@ -22,6 +22,7 @@ public class MovieRateServlet extends HttpServlet {
 		System.out.println(movieID);
 		Movie movie = daoMovie.getMovie(movieID);
 		request.setAttribute("movie", movie);
+		System.out.println(movie.title);
 		
 		getServletContext().getRequestDispatcher("/view/movies/view.jsp").forward(request, response);
 	}
