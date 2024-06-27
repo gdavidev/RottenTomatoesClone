@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,7 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import dataAccess.DAOMovies;
+import dataAccess.DAOMovies.SearchBy;
 import dataAccess.DAOMovies.SortBy;
+import models.Movie;
 
 @WebServlet(name="/MovieServlet",
 			urlPatterns={"/movies/view", "/movies/all", "/movies/edit", "/movies/add"})
@@ -27,13 +30,27 @@ public class MovieServlet extends HttpServlet {
 			case "/movies/view":
 				request.setAttribute("movie", daoMovies.getMovie((int) request.getAttribute("id")));
 				break;
-			case "movies/all":
-				request.setAttribute("movieList", daoMovies.getMovie(SortBy.NAME));
+			case "movies/all":				
+				request.setAttribute("movieList", ProcessRequestMovieSearch(request));
 				break;
 		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
+	}
+	
+	private ArrayList<Movie> ProcessRequestMovieSearch(HttpServletRequest request) {
+		String sortByValue = 	request.getParameter("sortBy");
+		String searchByValue = 	request.getParameter("searchBy");
+		String search = 		request.getParameter("search");
+		if (sortByValue == null && searchByValue == null && search == null)
+			return daoMovies.getMovie(SortBy.NAME);
+		if (searchByValue == null && search == null)
+			return daoMovies.getMovie(SortBy.valueOf(Integer.valueOf(sortByValue)));
+		if (searchByValue == null)
+			return daoMovies.getMovie(SortBy.valueOf(Integer.valueOf(sortByValue)), SearchBy.TITLE, search);
+		
+		return daoMovies.getMovie(SortBy.valueOf(Integer.valueOf(sortByValue)), SearchBy.valueOf(Integer.valueOf(searchByValue)), search);
 	}
 }
