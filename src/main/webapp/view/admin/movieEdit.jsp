@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/formItems.tld" prefix="formItem" %>
+<%@ taglib uri="/WEB_INF/formItems.tld" prefix="formItem" %>
 <%@ page import="models.Movie"%>
 <!DOCTYPE html>
 <html>
