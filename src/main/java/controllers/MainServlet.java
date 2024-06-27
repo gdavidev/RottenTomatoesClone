@@ -22,7 +22,7 @@ public class MainServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("bestRatingMovieList", daoMovies.getMovie(10, SortBy.BEST_RATING));
 		request.setAttribute("mostRatedMovieList", daoMovies.getMovie(10, SortBy.MOST_RATED));
-		getServletContext().getRequestDispatcher("/view/index.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -10,10 +10,12 @@ import models.User;
 
 import java.io.IOException;
 
+import com.mysql.cj.Session;
+
 import dataAccess.DAOUsers;
 
-@WebServlet(name="LoginServlet", urlPatterns={"/login", "/register"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name="mainServlet", urlPatterns={"/login", "/register"})
+public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAOUsers daoUsers = new DAOUsers();
 
