@@ -16,8 +16,8 @@
 		</ul>
 		<ul class="navbar-nav column-gap-2">
 			<li class="nav-item">
-				<form class="my-2 my-md-0">
-					<input class="form-control" type="text" placeholder="Search">
+				<form method="get" action="<%=request.getContextPath() %>/movies/all" class="my-2 my-md-0">
+					<input id="search" name="search" class="form-control" type="text" placeholder="Search">
 				</form>
 			</li>
 			<%			

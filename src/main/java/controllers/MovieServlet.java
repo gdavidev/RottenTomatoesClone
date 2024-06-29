@@ -45,16 +45,10 @@ public class MovieServlet extends HttpServlet {
 		String sortByValue		= request.getParameter("sortBy");
 		String searchByValue 	= request.getParameter("searchBy");
 		String search 			= request.getParameter("search");
-		String avgRating 		= request.getParameter("avgRatingRange");
-		if (sortByValue == null && searchByValue == null && search == null)
-			return daoMovies.getMovie(SortBy.NAME);
-		if (searchByValue == null && search == null)
-			return daoMovies.getMovie(SortBy.valueOf(Integer.valueOf(sortByValue)));
-		if (searchByValue == null)
-			return daoMovies.getMovie(SortBy.valueOf(Integer.valueOf(sortByValue)), SearchBy.TITLE, search);		
-		if (SearchBy.valueOf(Integer.valueOf(searchByValue)) == SearchBy.RATING_AVG)
+		String avgRating 		= request.getParameter("avgRatingRange");		
+		if (searchByValue != null && SearchBy.valueOf(Integer.valueOf(searchByValue)) == SearchBy.RATING_AVG)
 			return daoMovies.getMovie(SortBy.valueOf(Integer.valueOf(sortByValue)), SearchBy.RATING_AVG, avgRating);
 			
-		return daoMovies.getMovie(SortBy.valueOf(Integer.valueOf(sortByValue)), SearchBy.valueOf(Integer.valueOf(searchByValue)), search);
+		return daoMovies.getMovie(sortByValue, searchByValue, search);
 	}
 }

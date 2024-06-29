@@ -43,8 +43,11 @@
 						<div class="card swiper-slide">
 							<img src="https://placehold.co/30x40" class="card-img-top" alt="...">
 							<div class="card-body">
-								<h5 class="card-title text-truncate"><a href="view?movieID=<%= movie.id %>" style="text-decoration: none; color: inherit;"><%= movie.title %></a></h5>
-								<p class="card-text fs-6 text-secondary text-truncate"><%=movie.director %></p>
+								<div class="mb-2">
+									<h5 style="margin: 0 !important;" class="card-title text-truncate"><a href="view?movieID=<%= movie.id %>" style="text-decoration: none; color: inherit;"><%= movie.title %></a></h5>
+									<p style="margin: 0 !important;" class="card-text fs-6 text-info-emphasis text-truncate"><%=movie.director %></p>
+									<p style="margin: 0 !important;" class="card-text fs-7 text-secondary text-truncate"><%=movie.genre %></p>
+								</div>
 								<p class="card-text text-truncate">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 								<div id="ratings" class="w-100 d-flex align-items-center justify-content-end">
 									<p style="margin: 0; padding: 0"><%=(movie.ratingAverage * 10) %> %</p>
@@ -74,8 +77,11 @@
 						<div class="card swiper-slide">
 							<img src="https://placehold.co/30x40" class="card-img-top" alt="...">
 							<div class="card-body">
-								<h5 class="card-title text-truncate"><a href="view?movieID=<%= movie.id %>" style="text-decoration: none; color: inherit;"><%= movie.title %></a></h5>
-								<p class="card-text fs-6 text-secondary text-truncate"><%=movie.director %></p>
+								<div class="mb-2">
+									<h5 style="margin: 0 !important;" class="card-title text-truncate"><a href="view?movieID=<%= movie.id %>" style="text-decoration: none; color: inherit;"><%= movie.title %></a></h5>
+									<p style="margin: 0 !important;" class="card-text fs-6 text-info-emphasis text-truncate"><%=movie.director %></p>
+									<p style="margin: 0 !important;" class="card-text fs-7 text-secondary text-truncate"><%=movie.genre %></p>
+								</div>
 								<p class="card-text text-truncate">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 								<div id="ratings" class="w-100 d-flex align-items-center justify-content-end">
 									<p style="margin: 0; padding: 0"><%=(movie.ratingAverage * 10) %> %</p>

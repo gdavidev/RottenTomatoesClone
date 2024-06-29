@@ -57,6 +57,14 @@ public class DAOMovies extends DAO {
 		return getMovie(0, sortParameter, searchParameter, search);
 	}
 	
+	public ArrayList<Movie> getMovie(String sortParameter, String searchParameter, String search) {
+		SortBy sortBy 		= sortParameter 	!= null ? SortBy.valueOf(Integer.valueOf(sortParameter)) 		: SortBy.NAME;
+		SearchBy searchBy 	= searchParameter 	!= null ? SearchBy.valueOf(Integer.valueOf(searchParameter)) 	: SearchBy.TITLE;
+		String searchString	= search		 	!= null ? search										 		: "";
+		
+		return getMovie(0, sortBy, searchBy, searchString);
+	}
+	
 	public ArrayList<Movie> getMovie(int amount, SortBy sortParameter, SearchBy searchParameter, String search) {
 		ArrayList<Movie> list = new ArrayList<Movie>();
 		String query = 
@@ -104,30 +112,31 @@ public class DAOMovies extends DAO {
 	}
 	
 	private String makeOrderByClause(SortBy sortParameter) {
-		String orderBy = " ORDER BY ";
+		String orderBy = "";	
 		switch (sortParameter) {
-			case MOST_RATED: 	orderBy += " ratingCount DESC "; 		break;
-			case BEST_RATING: 	orderBy += " ratingAverage DESC ";		break;
-			case NAME: 			orderBy += " m.titulo DESC ";			break;
+			case MOST_RATED: 	orderBy += " ORDER BY ratingCount DESC "; 		break;
+			case BEST_RATING: 	orderBy += " ORDER BY ratingAverage DESC ";		break;
+			case NAME: 			orderBy += " ORDER BY m.titulo DESC ";			break;
 		}
 		return orderBy;
 	}	
 	
 	private String makeHavingClause(SearchBy searchParameter, String search) {
 		String having = "";
-		switch(searchParameter) {
-			case RATING_AVG:	having = " HAVING ratingAverage >= " + search + " "; 	break;
-			case RATING_COUNT:	having = " HAVING ratingCount >= " + search + " "; 		break;
-			default:			break;		
+		if (search.trim() != "") {
+			switch(searchParameter) {
+				case RATING_AVG:	having = " HAVING ratingAverage >= " + search + " "; 	break;
+				case RATING_COUNT:	having = " HAVING ratingCount >= " + search + " "; 		break;
+				default:			break;		
+			}
 		}
 		return having;
 	}
 	
 	private String makeLimitClause(int amount) {
 		if (amount > 0)
-			return " LIMIT " + amount;
-		else
-			return "";
+			return " LIMIT " + amount;		
+		return "";
 	}
 	
 	public Movie getMovie(int id) {
@@ -149,24 +158,20 @@ public class DAOMovies extends DAO {
 					rs.getInt("ratingCount"),
 					rs.getFloat("ratingAverage")
 				);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new Movie();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Movie();
 		}
 		return movie;
 	}
-
-
 	
 	public void store(Movie movie) {
 		if (movie.id == 0)
 			insertMovie(movie);
 		else
-			updateMovie(movie);
-			
+			updateMovie(movie);			
 	}
 	
 	private void insertMovie(Movie movie) {
