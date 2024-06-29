@@ -4,16 +4,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import models.Movie;
 
 public class DAOMovies extends DAO {
 	public static enum SearchBy {
-		NONE 			(0),
-		TITLE 			(1),
-		DIRECTOR 		(2),
+		NONE 			(-1),
+		TITLE 			(0),
+		DIRECTOR 		(1),
+		GENRE 			(2),		
 		RATING_AVG 		(3),
-		RATING_COUNT 	(4),
-		GENRE 			(5);		
+		RATING_COUNT 	(9);
 		Integer currentValue;
 		
 		SearchBy(int SearchByValue) {
@@ -23,8 +24,7 @@ public class DAOMovies extends DAO {
 		public static final SearchBy valueOf(Integer value) {
 			return Arrays.stream(SearchBy.values())
 					.filter(searchBy -> searchBy.currentValue.equals(value))
-					.findFirst()
-					.orElse(NONE);
+					.findFirst().orElse(NONE);
 		}
 	}
 	
@@ -41,8 +41,7 @@ public class DAOMovies extends DAO {
 		public static final SortBy valueOf(Integer value) {
 			return Arrays.stream(SortBy.values())
 					.filter(sortBy -> sortBy.currentValue.equals(value))
-					.findFirst()
-					.orElse(MOST_RATED);
+					.findFirst().orElse(MOST_RATED);
 		}
 	}	
 	
@@ -63,28 +62,14 @@ public class DAOMovies extends DAO {
 		String query = 
 				  " SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m "
 				+ " INNER JOIN ratings AS r ON r.movieId = m.id "
-				+ " GROUP BY m.id, m.titulo, m.diretor, m.genero ";
-		if (search.trim() != "") {
-			switch (searchParameter) {
-				case TITLE:			query += "WHERE m.titulo LIKE '%" + search + "%'"; 		break;
-				case DIRECTOR: 		query += "WHERE m.director LIKE '%" + search + "%'"; 	break;
-				case RATING_AVG:	query += "WHERE ratingAverage LIKE '%" + search + "%'"; break;
-				case RATING_COUNT:	query += "WHERE ratingCount LIKE '%" + search + "%'"; 	break;
-				case GENRE:			query += "WHERE m.genero LIKE '%" + search + "%'"; 		break;
-				default: break;
-			}
-		}
-		switch (sortParameter) {
-			case MOST_RATED: 	query += "ORDER BY ratingCount DESC "; 		break;
-			case BEST_RATING: 	query += "ORDER BY ratingAverage DESC ";	break;
-			case NAME: 			query += "ORDER BY m.titulo DESC ";			break;
-		}
-		if (amount > 0) {
-			query += " LIMIT " + amount;
-		}
+				+ makeWhereClause(searchParameter, search)
+				+ " GROUP BY m.id, m.titulo, m.diretor, m.genero "
+				+ makeHavingClause(searchParameter, search)
+				+ makeOrderByClause(sortParameter)
+				+ makeLimitClause(amount);
 		
-		ResultSet rs = this.dbQuery.query(query);
 		try {
+			ResultSet rs = this.dbQuery.query(query);
 			while(rs.next()) {
 				Movie movie = new Movie(
 					rs.getInt("m.id"),
@@ -96,11 +81,53 @@ public class DAOMovies extends DAO {
 				);
 				list.add(movie);
 			}
+			return list;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+		} catch (Exception e) {
+			e.printStackTrace();			
 		}
-		return list;
+		return new ArrayList<Movie>();
+	}
+	
+	private String makeWhereClause(SearchBy searchParameter, String search) {
+		String where = "";
+		if (search.trim() != "") {
+			switch (searchParameter) {
+				case TITLE:			where += " WHERE m.titulo LIKE '%" + search + "%' "; 		break;
+				case DIRECTOR: 		where += " WHERE m.diretor LIKE '%" + search + "%' "; 		break;
+				case GENRE:			where += " WHERE m.genero LIKE '%" + search + "%' "; 		break;
+				default:			break;
+			}
+		}
+		return where;
+	}
+	
+	private String makeOrderByClause(SortBy sortParameter) {
+		String orderBy = " ORDER BY ";
+		switch (sortParameter) {
+			case MOST_RATED: 	orderBy += " ratingCount DESC "; 		break;
+			case BEST_RATING: 	orderBy += " ratingAverage DESC ";		break;
+			case NAME: 			orderBy += " m.titulo DESC ";			break;
+		}
+		return orderBy;
+	}	
+	
+	private String makeHavingClause(SearchBy searchParameter, String search) {
+		String having = "";
+		switch(searchParameter) {
+			case RATING_AVG:	having = " HAVING ratingAverage >= " + search + " "; 	break;
+			case RATING_COUNT:	having = " HAVING ratingCount >= " + search + " "; 		break;
+			default:			break;		
+		}
+		return having;
+	}
+	
+	private String makeLimitClause(int amount) {
+		if (amount > 0)
+			return " LIMIT " + amount;
+		else
+			return "";
 	}
 	
 	public Movie getMovie(int id) {
@@ -108,11 +135,12 @@ public class DAOMovies extends DAO {
 		String query = 
 				  " SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m "
 				+ " INNER JOIN ratings AS r ON r.movieId = m.id "
-				+ " WHERE id = " + String.valueOf(id) + ";";
+				+ " WHERE id = " + String.valueOf(id) + " "
+				+ " GROUP BY m.id, m.titulo, m.diretor, m.genero;";
 		
-		ResultSet rs = this.dbQuery.query(query);
 		try {
-			rs.next();
+			ResultSet rs = this.dbQuery.query(query);
+			while(rs.next()) {
 				movie = new Movie(
 					rs.getInt("m.id"),
 					rs.getString("m.titulo"),
@@ -123,7 +151,10 @@ public class DAOMovies extends DAO {
 				);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+			return new Movie();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Movie();
 		}
 		return movie;
 	}

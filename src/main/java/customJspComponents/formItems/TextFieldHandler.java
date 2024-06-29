@@ -36,14 +36,14 @@ public class TextFieldHandler extends TagSupport {
 		boolean hasBottomTipText = this.bottomTipText != null;
 		JspWriter out = pageContext.getOut();
 		String elementTemplate =
-			"  <div class='mb-3'>"
+			"  <div id='" + this.name + "Container' class='mb-3'>"
 			+ "		<label for='" + this.name + "' class='form-label'>" + this.label + "</label>"
 			+ "		<input type='text' class='form-control' " + (hasBottomTipText ? "aria-describedby='" + this.name + "Tip'" : "") 
 			+ " 			id='" + this.name + "'"
 			+ " 			name='" + this.name + "'"
-			+ " 			placeholder='" + this.placeholder + "'"
+			+ " 			placeholder='" + (this.placeholder != null ? this.placeholder : "") + "'"
 			+ "				value='" + (this.value != null ? this.value : "") + "'"
-			+ "				required='" + (this.required ? "true" : "false") + "'>"
+			+ "				" + (this.required ? "required" : "") + ">"
 			+ (hasBottomTipText ? "<div id='"+ this.name + "Tip' class='form-text'>" + this.bottomTipText + "</div>" : "")
 			+ "</div>";	    
 		try {

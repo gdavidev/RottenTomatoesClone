@@ -20,10 +20,15 @@ public class ComboBoxHandler extends TagSupport {
 		this.label = label;
 	}
 	public void setDataSource(String dataSource) {
-		String[] data = dataSource.split(",");
-		for (int i = 0; i < data.length; i++)
-			data[i] = data[i].trim();
-		this.dataSource = data;
+		if (dataSource.length() > 0) {
+			dataSource = dataSource.substring(1, dataSource.length() - 1);
+			String[] data = dataSource.split(",");
+			for (int i = 0; i < data.length; i++)
+				data[i] = data[i].trim();
+			this.dataSource = data;			
+		} else {
+			this.dataSource = new String[0];
+		}
 	}
 	public void setOnChange(String onChange) {
 		this.onChange = onChange;
@@ -34,7 +39,6 @@ public class ComboBoxHandler extends TagSupport {
 	public void setRequired(boolean required) {
 		this.required = required;
 	}
-	
 	public boolean getRequired() {
 		return required;
 	}
@@ -71,5 +75,5 @@ public class ComboBoxHandler extends TagSupport {
 	
 	private String getUpdateSelectedOptionOnChange() {
 		return "$('option[value=' + this.value + ']', this).attr('selected', true).siblings().removeAttr('selected');";
-	}
+	}	
 }

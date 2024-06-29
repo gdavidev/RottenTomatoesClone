@@ -22,7 +22,7 @@
 					<img src="https://placehold.co/120x120" class="img-thumbnail" alt="...">
 				</div>
 				<div class="col">
-					<formItem:fileInput label="Poster:" name="poster" />				
+					<formItem:fileInput label="Poster:" name="poster" />
 				</div>
 			</div>
 			<div>

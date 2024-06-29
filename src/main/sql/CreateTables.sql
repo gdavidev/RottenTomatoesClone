@@ -24,6 +24,8 @@ SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUN
 INNER JOIN ratings AS r ON r.movieId = m.id
 GROUP BY m.id, m.titulo, m.diretor, m.genero;
 
+ SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m  INNER JOIN ratings AS r ON r.movieId = m.id WHERE m.titulo LIKE '%Lord%' GROUP BY m.id, m.titulo, m.diretor, m.genero  ORDER BY ratingCount DESC
+
 SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m  INNER JOIN ratings AS r ON r.movieId = m.id  GROUP BY m.id, m.titulo, m.diretor, m.genero ORDER BY ratingAverage LIMIT 10
 
 -- Inserção de registros na tabela de filmes
