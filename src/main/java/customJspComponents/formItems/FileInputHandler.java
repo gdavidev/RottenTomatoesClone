@@ -11,6 +11,7 @@ public class FileInputHandler extends TagSupport {
 	private String accept;
 	private boolean multiple;
 	private String bottomTipText;
+	private String onchange;
 	private boolean required;
 	
 	public void setName(String name) {
@@ -28,6 +29,9 @@ public class FileInputHandler extends TagSupport {
 	public void setBottomTipText(String bottomTipText) {
 		this.bottomTipText = bottomTipText;
 	}
+	public void setOnchange(String onchange) {
+		this.onchange = onchange;
+	}
 	public void setRequired(boolean required) {
 		this.required = required;
 	}
@@ -42,7 +46,8 @@ public class FileInputHandler extends TagSupport {
 			+ " 			id='" + this.name + "'"
 			+ " 			name='" + this.name + "'"
 			+ " 			accept='" + this.accept + "'"
-			+ "				required='" + (this.required ? "true" : "false") + "'"
+			+ (this.required ? "required" : "")
+			+ (this.onchange != null ? "onchange='" + this.onchange + "'" : "")
 			+ "				multiple='" + (this.multiple ? "true" : "false") + "'>"
 			+ (hasBottomTipText ? "<div id='"+ this.name + "Tip' class='form-text'>" + this.bottomTipText + "</div>" : "")
 			+ "</div>";	    
@@ -53,4 +58,5 @@ public class FileInputHandler extends TagSupport {
 		}
 		return SKIP_BODY;
 	}
+	
 }

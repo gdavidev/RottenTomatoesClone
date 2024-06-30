@@ -12,17 +12,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import models.Movie;
 import models.User;
 
-@WebServlet(name="MovieRateServlet", urlPatterns={"/rate"})
+@WebServlet(name="MovieRateServlet", urlPatterns={"/movies/rate"})
 public class MovieRateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAOMovies daoMovie = new DAOMovies();
 	DAORates daoRate = new DAORates();
-	
+	String movieTumbnailDir;
+		
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		movieTumbnailDir = getServletContext().getRealPath("/") + "media\\movieTumbnails\\";
+		
 		int movieID = Integer.parseInt(request.getParameter("movieID"));
 		Movie movie = daoMovie.getMovie(movieID);
+		daoMovie.LoadMovieTumbnailPath(request.getContextPath(), movieTumbnailDir, movie);
 		
 		request.setAttribute("movie", movie);
 		

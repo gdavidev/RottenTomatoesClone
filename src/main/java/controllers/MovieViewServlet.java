@@ -12,34 +12,31 @@ import jakarta.servlet.http.HttpServletResponse;
 import models.Movie;
 import models.User;
 
-@WebServlet(name="MovieViewServlet", urlPatterns={"/view"})
+@WebServlet(name="MovieViewServlet", urlPatterns={"/movies/view"})
 public class MovieViewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAOMovies daoMovie = new DAOMovies();
 	DAORates daoRate = new DAORates();
+	String movieTumbnailDir;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		movieTumbnailDir = getServletContext().getRealPath("/") + "media\\movieTumbnails\\";
 		int movieID = Integer.parseInt(request.getParameter("movieID"));
-		System.out.println(movieID);
 		Movie movie = daoMovie.getMovie(movieID);
+		daoMovie.LoadMovieTumbnailPath(request.getContextPath(), movieTumbnailDir, movie);
 		request.setAttribute("movie", movie);
-		System.out.println(movie.title);
 		
 		if (request.getSession().getAttribute("loggedUser") != null) {
 			User user = (User) request.getSession().getAttribute("loggedUser");
 			Boolean avaliado = daoRate.verificaAvaliacao(movie.id, user.id);
 			request.setAttribute("avaliado", avaliado);
-		}
-		
+		}		
 		
 		getServletContext().getRequestDispatcher("/view/movies/view.jsp").forward(request, response);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//super.doPost(request, response);
 	}
 }

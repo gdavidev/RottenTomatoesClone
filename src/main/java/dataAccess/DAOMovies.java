@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import helpers.files.FileSystemHelper;
 import models.Movie;
 
 public class DAOMovies extends DAO {
@@ -29,9 +30,9 @@ public class DAOMovies extends DAO {
 	}
 	
 	public static enum SortBy {
-		MOST_RATED 	(0),
-		BEST_RATING (1),
-		NAME 		(2);
+		NAME 		(0),
+		MOST_RATED 	(1),
+		BEST_RATING (2);
 		
 		Integer currentValue;
 		SortBy(int SortByValue) {
@@ -69,7 +70,7 @@ public class DAOMovies extends DAO {
 		ArrayList<Movie> list = new ArrayList<Movie>();
 		String query = 
 				  " SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m "
-				+ " INNER JOIN ratings AS r ON r.movieId = m.id "
+				+ " LEFT JOIN ratings AS r ON r.movieId = m.id "
 				+ makeWhereClause(searchParameter, search)
 				+ " GROUP BY m.id, m.titulo, m.diretor, m.genero "
 				+ makeHavingClause(searchParameter, search)
@@ -116,7 +117,7 @@ public class DAOMovies extends DAO {
 		switch (sortParameter) {
 			case MOST_RATED: 	orderBy += " ORDER BY ratingCount DESC "; 		break;
 			case BEST_RATING: 	orderBy += " ORDER BY ratingAverage DESC ";		break;
-			case NAME: 			orderBy += " ORDER BY m.titulo DESC ";			break;
+			case NAME: 			orderBy += " ORDER BY m.titulo ASC ";			break;
 		}
 		return orderBy;
 	}	
@@ -143,13 +144,13 @@ public class DAOMovies extends DAO {
 		Movie movie = new Movie();
 		String query = 
 				  " SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m "
-				+ " INNER JOIN ratings AS r ON r.movieId = m.id "
+				+ " LEFT JOIN ratings AS r ON r.movieId = m.id "
 				+ " WHERE id = " + String.valueOf(id) + " "
 				+ " GROUP BY m.id, m.titulo, m.diretor, m.genero;";
 		
 		try {
 			ResultSet rs = this.dbQuery.query(query);
-			while(rs.next()) {
+			if (rs.next()) {
 				movie = new Movie(
 					rs.getInt("m.id"),
 					rs.getString("m.titulo"),
@@ -167,6 +168,17 @@ public class DAOMovies extends DAO {
 		return movie;
 	}
 	
+	public void LoadMovieListTumbnailPaths(String serverContextPath, String directoryRealPath, ArrayList<Movie> movieList) {
+		for (Movie movie : movieList)
+			LoadMovieTumbnailPath(serverContextPath, directoryRealPath, movie);
+	}
+	
+	public void LoadMovieTumbnailPath(String serverContextPath, String directoryRealPath, Movie movie) {
+		String realTumbnailPath = FileSystemHelper.getFileFullPath(directoryRealPath, String.valueOf(movie.id));
+		String serverTumbnailPath = FileSystemHelper.FileAbsolutePathToServerPath(serverContextPath, realTumbnailPath);
+		movie.tumbnailPath = serverTumbnailPath;
+	}
+	
 	public void store(Movie movie) {
 		if (movie.id == 0)
 			insertMovie(movie);
@@ -176,17 +188,30 @@ public class DAOMovies extends DAO {
 	
 	private void insertMovie(Movie movie) {
 		String query = 
-				" INSERT INTO Movies(titulo, diretor, genero)"
-				+ " VALUES('"+ movie.title +"', '"+ movie.director +"', '"+ movie.genre +"')";
-		dbQuery.execute(query);
+				" INSERT INTO Movies(titulo, diretor, genero) "
+				+ " VALUES('"+ movie.title +"', '"+ movie.director +"', '"+ movie.genre +"');";
+		String queryLastId = " SELECT LAST_INSERT_ID() AS lastInsertId; ";
+		
+		try {
+			this.dbQuery.execute(query);
+			ResultSet rs = this.dbQuery.query(queryLastId);
+			if (rs.next()) {
+				movie.id = rs.getInt("lastInsertId");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void updateMovie(Movie movie) {
 		String query = 
 				" UPDATE Movies SET "
 				+ " titulo = '"+ movie.title +"',"
-				+ " diretor = '"+ movie.title +"',"
-				+ " genero = '"+ movie.title +"';";
-		dbQuery.execute(query);
+				+ " diretor = '"+ movie.director +"',"
+				+ " genero = '"+ movie.genre +"'"
+				+ " WHERE id = " + movie.id;
+		this.dbQuery.execute(query);
 	}
 }

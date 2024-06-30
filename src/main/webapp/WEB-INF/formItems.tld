@@ -178,8 +178,13 @@
 			<required>false</required>
 		</attribute>
 		<attribute>
+			<name>onchange</name>
+			<required>false</required>
+		</attribute>
+		<attribute>
 			<name>required</name>
 			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
 			<type>boolean</type>
 		</attribute>
 	</tag>

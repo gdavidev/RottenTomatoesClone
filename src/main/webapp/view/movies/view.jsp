@@ -11,20 +11,19 @@
     	DAORates daoRate = new DAORates();
     %>
     <title>Rotten Tomatoes | <%= movie.title %></title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <%@ include file="/view/common/navbar.jsp" %>
 
     <div class="container mt-5">
-        <div class="row">
+        <div class="row w-50 mx-auto">
             <!-- Left side: Movie image -->
-            <div class="col-md-6">
-                <img src="https://placehold.co/540x540.jpg" class="img-fluid" alt="<%= movie.title %> Poster">
+            <div class="col">
+            	<% String imgPath = movie.tumbnailPath != null && movie.tumbnailPath != "" ? movie.tumbnailPath : "https://placehold.co/540x540.jpg"; %>
+                <img src="<%=imgPath %>" style="height: 60vh" class="img-fluid" alt="<%= movie.title %> Poster">
             </div>
             <!-- Right side: Movie information -->
-            <div class="col-md-6">
+            <div class="col">
                 <h2><%= movie.title %></h2>
                 <p><strong>Director:</strong> <%= movie.director %></p>
                 <p><strong>Genre:</strong> <%= movie.genre %></p>
@@ -50,7 +49,7 @@
 				<% 
 				if (request.getSession().getAttribute("loggedUser") != null) {
 					%><div class="mt-5">
-					    <a href="/RottenTomatoesClone/rate?movieID=<%= movie.id %>"><button type="button" class="btn btn-primary" style="width: 150px;">
+					    <a href="<%=request.getContextPath() %>/movies/rate?movieID=<%= movie.id %>"><button type="button" class="btn btn-primary" style="width: 150px;">
 					    <%	
 					    	User user = (User) request.getSession().getAttribute("loggedUser");
 					    	Boolean avaliado = daoRate.verificaAvaliacao(movie.id, user.id);

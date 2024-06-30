@@ -16,6 +16,12 @@
 		String selectedIndexSortBy = 	(request.getParameter("sortBy") 		== null ? "0" 	: request.getParameter("sortBy"));
 		String selectedIndexSerchBy = 	(request.getParameter("searchBy") 		== null ? "0" 	: request.getParameter("searchBy"));
 		String avgRatingRange = 		(request.getParameter("avgRatingRange") == null ? "0" 	: request.getParameter("avgRatingRange"));
+		
+		User loggedUser = (User) request.getSession().getAttribute("loggedUser");
+		boolean isUserAdmin = false;
+		if (loggedUser != null) {
+			isUserAdmin = loggedUser.admin == 1;
+		}
 	%>
 	<%@ include file="/view/common/defaultPageHead.jsp" %>
 	<title>Procurar Filmes</title>
@@ -42,15 +48,20 @@
 		
 		<div class="d-flex flex-wrap column-gap-2 row-gap-2">
 			<%for (Movie movie : movieList) { %>
+				<% String imgPath = movie.tumbnailPath != null && movie.tumbnailPath != "" ? movie.tumbnailPath : "https://placehold.co/30x40"; %>
+				<% String onClickPath = request.getContextPath() + (isUserAdmin ? "/movies/edit" : "/movies/view") + "?movieID=" + movie.id; %>
 				<div class="card" style="width: 14rem;">
-					<img src="https://placehold.co/30x40" class="card-img-top" alt="...">
+					<a href="<%=onClickPath %>" style="text-decoration: none; color: inherit;">
+						<img src="<%=imgPath %>" class="card-img-top" style="height: 260px" alt="<%=movie.title %>">
+					</a>
 					<div class="card-body">
 						<div class="mb-2">
-							<h5 style="margin: 0 !important;" class="card-title text-truncate"><a href="view?movieID=<%= movie.id %>" style="text-decoration: none; color: inherit;"><%= movie.title %></a></h5>
+							<h5 style="margin: 0 !important;" class="card-title text-truncate">
+								<a href="<%=onClickPath %>" style="text-decoration: none; color: inherit;"><%= movie.title %></a>
+							</h5>
 							<p style="margin: 0 !important;" class="card-text fs-6 text-info-emphasis text-truncate"><%=movie.director %></p>
 							<p style="margin: 0 !important;" class="card-text fs-7 text-secondary text-truncate"><%=movie.genre %></p>
 						</div>
-						<p class="card-text text-truncate">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 						<div id="ratings" class="w-100 d-flex align-items-center justify-content-end">
 							<p style="margin: 0; padding: 0"><%=(movie.ratingAverage * 10) %> %</p>
 							<div id="star-container" class="d-inline-block text-align-end">
@@ -61,8 +72,8 @@
 								</div>
 							</div>
 							<p style="margin: 0; padding: 0;">(<%=movie.ratingCount %>)</p>
-						</div>					
-					</div>					
+						</div>
+					</div>			
 				</div>
 			<%} %>
 		</div>

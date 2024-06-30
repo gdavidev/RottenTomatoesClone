@@ -7,6 +7,7 @@ public class Movie {
 	public String genre;
 	public int ratingCount;
 	public float ratingAverage;
+	public String tumbnailPath;
 	
 	public Movie(int id, String title, String director, String genre, int ratingCount, float ratingAverage) {
 		this.id = id;

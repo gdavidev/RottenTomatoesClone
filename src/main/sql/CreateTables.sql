@@ -9,7 +9,8 @@ CREATE TABLE users (
 	id 			INT AUTO_INCREMENT PRIMARY KEY,
 	userName 	VARCHAR(255),
 	email 		VARCHAR(255),
-	password	VARCHAR(255)
+	password	VARCHAR(255),
+    admin		INT
 );
 
 CREATE TABLE ratings (
@@ -20,13 +21,8 @@ CREATE TABLE ratings (
 	FOREIGN KEY (userId) REFERENCES users(id)
 );
 
-SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS rating FROM movies AS m
-INNER JOIN ratings AS r ON r.movieId = m.id
-GROUP BY m.id, m.titulo, m.diretor, m.genero;
-
- SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m  INNER JOIN ratings AS r ON r.movieId = m.id WHERE m.titulo LIKE '%Lord%' GROUP BY m.id, m.titulo, m.diretor, m.genero  ORDER BY ratingCount DESC
-
-SELECT m.id, m.titulo, m.diretor, m.genero, COUNT(r.userId) AS ratingCount, ROUND(AVG(r.rating), 2) AS ratingAverage FROM movies AS m  INNER JOIN ratings AS r ON r.movieId = m.id  GROUP BY m.id, m.titulo, m.diretor, m.genero ORDER BY ratingAverage LIMIT 10
+SELECT * FROM movies;
+SELECT * FROM users;
 
 -- Inserção de registros na tabela de filmes
 INSERT INTO movies (titulo, diretor, genero) VALUES

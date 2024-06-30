@@ -29,8 +29,10 @@
 			    		<%=user.userName %>
 				  	</button>
 				  	<ul class="dropdown-menu">
-				   		<li><a class="dropdown-item" href="#">Meus favoritos</a></li>
-					    <li><a class="dropdown-item" href="logout">Sair</a></li>				    
+				   		<%if (user.admin == 1) { %>
+				   			<li><a class="dropdown-item" href="<%=request.getContextPath() %>/movies/edit">Cadastrar Filme</a></li>
+				   		<%} %>				   		
+					    <li><a class="dropdown-item" href="<%=request.getContextPath() %>/logout">Sair</a></li>				    
 				  	</ul>
 	         	</li>
          	<%} else { %>
